@@ -7,44 +7,23 @@ import (
 func canCompleteCircuit(gas []int, cost []int) int {
     currentGas := 0
     start := 0
-    done := false
+    totalGas := 0
+
     for i:=0; i<len(gas); i++ {
-        if cost[i] > gas[i] {
-            continue
-        }
-        isBreak := false
-        for j:=i; j<len(gas); j++ {
-            currentGas += gas[j] - cost[j]
-            if currentGas < 0 {
-                isBreak = true
-                currentGas = 0
-                break
-            }
-        }
-        if isBreak {
-            continue
-        }
-        if i == 0 {
-            return i
-        }
-        // we made to the end of the array. check the first entries
-        for k:=0; k<i; k++ {
-            currentGas += gas[k] - cost[k]
-            if currentGas < 0 {
-                return -1
-            }
-            done = true
-        }
-        if done {
-            start = i
-            break
+        currentGas += gas[i] - cost[i]
+        totalGas += gas[i] - cost[i]
+
+        if currentGas < 0 {
+            currentGas = 0
+            start = i+1
         }
     }
-    if done {
-        return start
-    } else {
+
+    if totalGas < 0 {
         return -1
     }
+    return start
+
 }
 
 func main() {
